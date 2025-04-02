@@ -9,18 +9,22 @@ function Layout({ children }) {
     const { isAuthenticated, login } = useAuth();
     const router = useRouter();
 
-    useEffect( () => {
-        if(!isAuthenticated){
+    useEffect(() => {
+        console.log(router)
+        if (!isAuthenticated) {
             router.push('/');
         }
+
+        console.log()
+
     }, [isAuthenticated, login]);
     return (<>
         <Header />
         <div className='flex flex-row '>
             <Sidenav />
             <div className='flex-grow px-5 mt-4 h-[calc(100vh-82px)] overflow-auto'>
-                {!isAuthenticated && <h1>loading</h1> }
-                {isAuthenticated && [children] }
+                {!isAuthenticated && <h1>loading</h1>}
+                {isAuthenticated && [children]}
             </div>
         </div>
     </>);
