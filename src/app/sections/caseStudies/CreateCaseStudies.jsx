@@ -1,18 +1,74 @@
-<<<<<<< HEAD
 
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik } from 'formik';
-import Tiptap from "../../../_components/Tiptap";
-import Typography from "../../../_components/Typography";
-import Button from "../../../_components/Button";
+import Tiptap from "../../_components/Tiptap";
+import axios, { Axios } from 'axios';
 
-=======
-import CreateCaseStudies from './../../../sections/caseStudies/CreateCaseStudies';
->>>>>>> ed4c27174ead21ac80c56484e0bed18ddeadf745
-function page() {
+
+function CreateCaseStudies() {
+    const [dataFromChild, setDataFromChild] = useState("");
+    const [mainCategoryList, setMainCategoryList] = useState([]);
+    const [subCategoryList, setSubCategoryList] = useState([]);
+    const [verticalCategoryList, setVerticalCategoryList] = useState([]);
+
+
+
+
+    useEffect(() => {
+        getCategoryListData();
+    }, []);
+
+
+    async function getCategoryListData() {
+        try {
+            // const data = await axios.all(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/GetCaseStudiesMainCategory`);
+            const [main, sub, vertical] = await axios.all([
+                axios.get(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/GetCaseStudiesMainCategory`),
+                axios.get(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/GetCaseStudiesSubCategory`),
+                axios.get(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/GetCaseStudiesVertical`),
+
+            ])
+            console.log(vertical.data.model)
+            setMainCategoryList(main.data.model);
+            setSubCategoryList(sub.data.model)
+            setVerticalCategoryList(vertical.data.model);
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    function handleDataFromChild(data) {
+        setDataFromChild(data.name);
+    }
+
+    async function createFormSubmit(value) {
+        console.log(dataFromChild, "dataFromChild")
+        let data = {
+            CaseStudyMainCategory: value.mainCategory,
+            CaseStudySubCategory: value.subCategory,
+            Vertical: value.verticalCategory,
+            Title: value.title,
+            ClientName: value.clientName,
+            Industry: value.clientIndustry,
+            Location: value.clientCountry,
+            EngagementSince: value.clientEngagement,
+            Banner: value.banner,
+            BannerImage: value.bannerImage,
+            HighlightIndustry: value.highlightsIndustry,
+            HighlightProjectLocation: value.highlightsLocation,
+            HighlightEngagementSince: value.highlightsEngagement,
+            Description: dataFromChild,
+            DownloadCTAText: "download",
+            DownloadCTATURL: "www.download test"
+        }
+
+        let res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/AddCaseStudy`, data, {})
+        console.log(res, "after submit");
+    }
+
     return (<>
-<<<<<<< HEAD
         {/* <div className="">
             <div className="breadcrumbs text-sm format">
                 <ul>
@@ -23,11 +79,11 @@ function page() {
         </div> */}
         <div className="card bg-base-100 w-full shadow-xl">
             <div className="card-body">
-                <Typography varient="h2">Create case studies</Typography>
+                <h2 className="card-title">Create case studies </h2>
                 <Formik
                     initialValues={{
-                        title: '', mainCategory: '', subCategory: '', subCategory: '', verticalCategory: '', clientName: '', clientIndustry: '',
-                        clientCountry: '', clientEngagement: '', highlightsIndustry: '', highlightsLocation: '', highlightsEngagement: '',
+                        title: '', mainCategory: '', subCategory: '', verticalCategory: '', clientName: '', clientIndustry: '',
+                        clientCountry: '', clientEngagement: '', highlightsIndustry: '', highlightsLocation: '', highlightsEngagement: '', bannerImage: '', banner: '',
                     }}
                     validate={values => {
                         console.log(values);
@@ -65,12 +121,18 @@ function page() {
                         if (!values.highlightsEngagement) {
                             errors.highlightsEngagement = 'Engagement since Required';
                         }
+                        if (!values.banner) {
+                            errors.banner = 'thumbnail image Required';
+                        }
+                        if (!values.bannerImage) {
+                            errors.bannerImage = 'Banner Required';
+                        }
                         return errors;
                     }}
                     onSubmit={(values, { setSubmitting }) => {
                         console.log(values, "valuesss")
                         setTimeout(() => {
-                            // alert(JSON.stringify(values, null, 2));
+                            createFormSubmit(values);
                             console.log(values)
                             setSubmitting(false);
                         }, 400);
@@ -89,7 +151,7 @@ function page() {
                         <form onSubmit={handleSubmit}>
                             <label className="form-control w-full mb-4">
                                 <div className="label">
-                                    <Typography varient="span" className="label-text">Enter Title</Typography>
+                                    <span className="label-text">Enter Title</span>
                                 </div>
                                 <input type="text"
                                     name="title"
@@ -114,9 +176,10 @@ function page() {
                                         onBlur={handleBlur}
                                         value={values.mainCategory}
                                     >
-                                        <option disabled>Pick one</option>
-                                        <option value="Star Wars">Star Wars</option>
-                                        <option value="">Star 2ss</option>
+                                        <option disabled value='' defaultValue>Select Main Category </option>
+                                        {mainCategoryList?.map((item, index) => (
+                                            <option key={index.mainCategoryID} value={index.mainCategoryName}>{item.mainCategoryName}</option>
+                                        ))}
 
                                     </select>
                                     {errors?.mainCategory && (<div className="label">
@@ -133,9 +196,11 @@ function page() {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.subCategory}>
-                                        <option disabled>Pick one sub</option>
-                                        <option value='star war2'>Star Wars</option>
-                                        <option>Harry Potter</option>
+                                        <option disabled value='' defaultValue>Select Sub Category </option>
+
+                                        {subCategoryList?.map((item, index) => (
+                                            <option key={index.subCategoryID} value={index.subCategoryName}>{item.subCategoryName}</option>
+                                        ))}
 
                                     </select>
                                     {errors.subCategory && (<div className="label">
@@ -152,9 +217,11 @@ function page() {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.verticalCategory}>
-                                        <option disabled>Pick one</option>
-                                        <option value="star war">Star Wars</option>
-                                        <option>Harry Potter</option>
+                                        <option disabled value='' defaultValue>Select Verticle Category </option>
+
+                                        {verticalCategoryList?.map((item, index) => (
+                                            <option key={index.verticalID} value={index.verticalName}>{item.verticalName}</option>
+                                        ))}
                                     </select>
                                     {errors.verticalCategory && (<div className="label">
                                         <span className="label-text-alt text-red-500">{errors.verticalCategory}</span>
@@ -309,9 +376,14 @@ function page() {
                                         <div className="label">
                                             <span className="label-text">Thumbnail Image</span>
                                         </div>
-                                        <input type="file" className="file-input file-input-bordered w-full " />
+                                        <input type="file" className="file-input file-input-bordered w-full" name="banner"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.banner} />
                                         <div className="label">
-                                            {/* <span className="label-text-alt">Alt label</span> */}
+                                            {errors?.banner && (<div className="label">
+                                                <span className="label-text-alt text-red-500">{errors.banner}</span>
+                                            </div>)}
                                         </div>
                                     </label>
                                 </div>
@@ -319,18 +391,23 @@ function page() {
                                 <div className="">
                                     <label className="form-control w-full ">
                                         <div className="label">
-                                            <span className="label-text">Detail page Image</span>
+                                            <span className="label-text">Detail CreateCaseStudies Image</span>
                                         </div>
-                                        <input type="file" className="file-input file-input-bordered w-full " />
+                                        <input type="file" className="file-input file-input-bordered w-full " name="bannerImage"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.bannerImage} />
                                         <div className="label">
-                                            {/* <span className="label-text-alt">Alt label</span> */}
+                                            {errors?.bannerImage && (<div className="label">
+                                                <span className="label-text-alt text-red-500">{errors.bannerImage}</span>
+                                            </div>)}
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             {/* end image */}
                             <div className="card-actions justify-end">
-                                <Button className="w-[200px]" type="submit" disabled={isSubmitting}>Submit</Button>
+                                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>Buy Now</button>
                             </div>
                         </form>
                     )}
@@ -339,11 +416,6 @@ function page() {
             </div>
         </div>
     </>);
-=======
-        <CreateCaseStudies />
-    </>
-    )
->>>>>>> ed4c27174ead21ac80c56484e0bed18ddeadf745
 }
 
-export default page;
+export default CreateCaseStudies;

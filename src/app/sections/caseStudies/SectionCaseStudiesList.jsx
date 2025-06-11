@@ -1,25 +1,34 @@
-<<<<<<< HEAD
 'use client'
-import { useEffect } from 'react';
-import Typography from '../../_components/Typography';
-export default function page() {
-    const apiurl = 'https://mailer.godrejenterprises.com/godrejinfotechapi/'
-=======
+import { useEffect,useState } from 'react';
+import axios, { Axios } from 'axios';
+import Link from 'next/link';
 
-// import SectionCaseStudiesList from './../../../sections/caseStudies/SectionCaseStudiesList';
-import SectionCaseStudiesList from './../../sections/caseStudies/SectionCaseStudiesList';
->>>>>>> ed4c27174ead21ac80c56484e0bed18ddeadf745
+export default function SectionCaseStudiesList() {
 
-export default function page(){
-    return(
+    const [caseStudiesList , setCaseStudiesList] = useState([])
+
+    useEffect(() => {
+        getCaseStudiesList()
+    }, []);
+
+    async function getCaseStudiesList() {
+        try {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}CaseStudy/GetAllCaseStudiesList`);
+            console.log(res.data.model)
+            setCaseStudiesList(res.data.model)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    return (
         <>
-<<<<<<< HEAD
             <div className="flex justify-end mb-4 items-center">
                 {/* <Button click={handleclick}>Add Blog </Button> */}
                 {/* <div className="format">
                 <h3>case studies</h3>
                 </div> */}
-                <a href="/admin/case-studies/create" className="btn bg-primary text-white hover:text-black">Add Case study</a>
+                <Link href="/admin/case-studies/create" className="btn bg-primary text-white hover:text-black">Add Case study</Link>
             </div>
             <div className="">
                 <table className="table table-pin-rows table-pin-cols">
@@ -35,27 +44,28 @@ export default function page(){
                     </thead>
                     <tbody>
                         {/* row 1 */}
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                            <tr key={item}>
+                        {caseStudiesList?.map((item, index) => (
+                            <tr key={index}>
                                 <th>
-                                    1
+                                    {index + 1}
                                 </th>
                                 <td>
                                     <div className="flex items-center gap-3">
                                         <div className="avatar">
                                             <div className="mask mask-squircle h-12 w-12">
                                                 <img
-                                                    src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                                                    src={item.caseStudyBanner}
                                                     alt="Avatar Tailwind CSS Component" />
                                             </div>
                                         </div>
                                         <div>
-                                            <Typography varient="h4" className={'text-primary'}>John Doe</Typography>
+                                            <div>lockdownInner</div>
+                                            {/* <div className="text-sm opacity-50">United States</div> */}
                                         </div>
                                     </div>
                                 </td>
-                                <td><Typography varient="h5" className={'text-primary'}>John Doe</Typography></td>
-                                <td>20/10/25</td>
+                                <td className="font-semibold">{item.caseStudyTitle}</td>
+                                <td>{item.caseStudyInsertedOn}</td>
                                 <th>
                                     <button className="btn btn-ghost btn-xs">view</button>
                                     <button className="btn btn-ghost btn-xs">edit</button>
@@ -65,9 +75,8 @@ export default function page(){
                     </tbody>
                 </table>
             </div>
-=======
-        <SectionCaseStudiesList />
->>>>>>> ed4c27174ead21ac80c56484e0bed18ddeadf745
         </>
+
+
     )
 }
