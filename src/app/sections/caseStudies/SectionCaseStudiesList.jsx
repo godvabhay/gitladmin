@@ -1,6 +1,7 @@
 'use client'
 import { useEffect,useState } from 'react';
 import axios, { Axios } from 'axios';
+import Link from 'next/link';
 
 export default function SectionCaseStudiesList() {
 
@@ -27,7 +28,7 @@ export default function SectionCaseStudiesList() {
                 {/* <div className="format">
                 <h3>case studies</h3>
                 </div> */}
-                <a href="/admin/case-studies/create" className="btn bg-primary text-white hover:text-black">Add Case study</a>
+                <Link href="/admin/case-studies/create" className="btn bg-primary text-white hover:text-black">Add Case study</Link>
             </div>
             <div className="">
                 <table className="table table-pin-rows table-pin-cols">

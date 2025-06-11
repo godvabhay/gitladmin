@@ -1,6 +1,7 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import Typography from './Typography';
+import Link from 'next/link';
 
 export default function Sidenav() {
     const pathname = usePathname();
@@ -19,7 +20,7 @@ export default function Sidenav() {
                         const isActive = pathname.startsWith(item?.url);
                         return (
                             <li key={item?.id}>
-                                <a className={isActive ?
+                                <Link className={isActive ?
                                     "active" :
                                     ""
                                 } href={item?.url}>
@@ -38,7 +39,7 @@ export default function Sidenav() {
                                     <Typography varient='h5' className={isActive ?
                                         "active " :
                                         "text-text"}>{item?.text}</Typography>
-                                </a>
+                                </Link>
                             </li>
                         )
                     })}
