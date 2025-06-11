@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react';
+import Typography from '../../_components/Typography';
 export default function page() {
-
     const apiurl = 'https://mailer.godrejenterprises.com/godrejinfotechapi/'
 
     useEffect(() => {
@@ -52,12 +52,11 @@ export default function page() {
                                             </div>
                                         </div>
                                         <div>
-                                            <div >lockdownInner</div>
-                                            {/* <div className="text-sm opacity-50">United States</div> */}
+                                            <Typography varient="h4" className={'text-primary'}>John Doe</Typography>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="font-semibold">Life in the Lockdown - Is the “New Normal” actually the “Normal” that I have missed out on?</td>
+                                <td><Typography varient="h5" className={'text-primary'}>John Doe</Typography></td>
                                 <td>20/10/25</td>
                                 <th>
                                     <button className="btn btn-ghost btn-xs">view</button>

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Formik } from 'formik';
 import Tiptap from "../../../_components/Tiptap";
+import Typography from "../../../_components/Typography";
+import Button from "../../../_components/Button";
 
 function page() {
     const [dataFromChild, setDataFromChild] = useState("");
@@ -22,7 +24,7 @@ function page() {
         </div> */}
         <div className="card bg-base-100 w-full shadow-xl">
             <div className="card-body">
-                <h2 className="card-title">Create case studies </h2>
+                <Typography varient="h2">Create case studies</Typography>
                 <Formik
                     initialValues={{
                         title: '', mainCategory: '', subCategory: '', subCategory: '', verticalCategory: '', clientName: '', clientIndustry: '',
@@ -88,7 +90,7 @@ function page() {
                         <form onSubmit={handleSubmit}>
                             <label className="form-control w-full mb-4">
                                 <div className="label">
-                                    <span className="label-text">Enter Title</span>
+                                    <Typography varient="span" className="label-text">Enter Title</Typography>
                                 </div>
                                 <input type="text"
                                     name="title"
@@ -329,7 +331,7 @@ function page() {
                             </div>
                             {/* end image */}
                             <div className="card-actions justify-end">
-                                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>Buy Now</button>
+                                <Button className="w-[200px]" type="submit" disabled={isSubmitting}>Submit</Button>
                             </div>
                         </form>
                     )}

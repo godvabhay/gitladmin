@@ -14,9 +14,6 @@ function Layout({ children }) {
         if (!isAuthenticated) {
             router.push('/');
         }
-
-        console.log()
-
     }, [isAuthenticated, login]);
     return (<>
         <Header />
